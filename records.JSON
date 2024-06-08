@@ -1,20 +1,40 @@
- [
-    {
-      "ID": 10001,
-      "name": "Abraham Algorithm",
-      "age": 42,
-      "height": 163,
-      "weight": "50",
-      "medicalConditions": "", 
-      "medications": ["Medication A", "Medication C"]
-    }, 
-{
+[
+  {
+    "ID": 10001,
+    "name": "Abraham Algorithm",
+    "age": 42,
+    "height": 163,
+    "weight": "50",
+    "medicalConditions": "",
+    "medications": [
+      "Medication A",
+      "Medication C"
+    ]
+  },
+  {
     "ID": 10002,
-  "name": "Balding Barnacle",
-  "age": 42, 
-  "height": 163, 
-  "weight": 21, 
-  "medicalConditions": "Allergy to whiteboard markers", 
-  "medications": ["Medication C"]
-}
-  ]
+    "name": "Balding Barnacle",
+    "age": 42,
+    "height": 163,
+    "weight": 21,
+    "medicalConditions": "Allergy to whiteboard markers",
+    "medications": [
+      "Medication C"
+    ]
+  },
+  {
+    "ID": "10003",
+    "name": "Candied Carousel",
+    "age": "32",
+    "height": "176",
+    "weight": "67",
+    "medicalConditions": [
+      "Allergy to wind",
+      "allergy to dust"
+    ],
+    "medications": [
+      "Medication A",
+      "Medication D"
+    ]
+  }
+]
