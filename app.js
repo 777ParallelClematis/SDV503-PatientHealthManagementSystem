@@ -34,7 +34,6 @@ function patientMenu() {
     console.log("Patient menu loading ...")
 }
 
-function 
 
 
 // patient menu options
