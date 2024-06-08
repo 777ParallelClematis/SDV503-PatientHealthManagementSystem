@@ -1,8 +1,8 @@
 import inquirer from 'inquirer'
-
-
-// function to show initial menu
-
+import fs from 'fs/promises';
+import path from 'path';
+// variables as follows:
+const recordsData = fs.readFileSync('records.JSON', 'utf8')
 
 // Function to show initial menu
 async function initialMenu() {
@@ -19,23 +19,50 @@ async function initialMenu() {
     } else if (answers.viewOptions === "I am a Patient") {
         patientMenu()
     } else {
-        console.log("Contact Developer option selected, enter the message you wish to send")
+        console.log("Contact Developer option selected, enter the message you wish to send") 
         readline
     }
 }
 
-initialMenu();
+initialMenu()
+// function to show the medical professional menu of actions that can be made
+async function medicalProfessionalMenu() {
+    const questions = [{
+    type: "list",
+    name: "medicalProfessionalMenu", 
+    message: "Select an option", 
+    choices: ["View Patient List", "Add a Patient", "Exit"] 
+    }]
+    const answers = await inquirer.prompt(questions)
+    if (answers.medicalProfessionalMenu === "View Patient List"){
+        viewPatientList()
+    }else if (answers.medicalProfessionalMenu === "Add a Patient"){
+        addPatient()
+    }else{initialMenu()}
+}
+medicalProfessionalMenu()
 
-function medicalProfessionalMenu() {
-    console.log("Medical Professional Menu loading ...")
+// function for a medical professional to view a list of their patients or input an ID number
+function viewPatientList(){
+    const questions = [{
+            type: "list", 
+            name: "patientList",
+            message: "Select a patient to view", 
+            choices: ["input ID number", `${records.name}`]
+    }]
 }
 
-function patientMenu() {
+// addPatient(){}
+
+// function to display patient menu
+async function patientMenu() {
     console.log("Patient menu loading ...")
+    const questions = [{
+            type: "list", 
+            name: "patientMenu",
+            message: "Select an option",
+            choices:["View Profile","Edit Profile", "Contact Medical Professional"]
+
+    }]
 }
 
-// testing git
-
-// patient menu options
-
-// medpro menu options
