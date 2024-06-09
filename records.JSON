@@ -36,5 +36,20 @@
       "Medication A",
       "Medication D"
     ]
+  },
+  {
+    "ID": "10004",
+    "name": "Damned Damnation",
+    "age": "46",
+    "height": "132",
+    "weight": "41",
+    "medicalConditions": [
+      "Typhoid",
+      "Lead poisoning",
+      "scurvy"
+    ],
+    "medications": [
+      "Methamphetamines"
+    ]
   }
 ]
