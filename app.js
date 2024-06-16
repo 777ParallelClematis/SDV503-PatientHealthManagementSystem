@@ -47,7 +47,6 @@ initialMenu()
      }else{initialMenu()}
                                           }
 
-
 async function contactDeveloper() {
 console.log("Contact the developer at erin-colane@live.nmit.ac.nz")
 
@@ -56,13 +55,12 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz")
 
  // function for a medical professional to view a list of their patients or input an ID number
   async function viewPatientList(){
-   const choices = ['search by ID number', ...records.map(record => record.name)]
 
    const questions = [{
        type: "list", 
        name: "patientList",
        message: "Select a patient to view", 
-       choices: choices
+       choices: ['search by ID number', ...records.map(record => record.name)]
                    }]
 
     const answers = await inquirer.prompt(questions)
@@ -76,7 +74,7 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz")
         console.log(`Height:${records[selectedIndex].height}`)
         console.log(`Weight: ${records[selectedIndex].weight}`)
         console.log(`Medical Conditions: ${records[selectedIndex].medicalConditions}`)
-        console.log(`Medications: ${records[selectedIndex].medicalConditions}`)
+        console.log(`Medications: ${records[selectedIndex].medications}`)
     }
     console.log(`Selected patient: ${answers.patientList}`)
 }
