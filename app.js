@@ -62,16 +62,28 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was goi
                    }]
 
     const answers = await inquirer.prompt(questions)
-    if (answers.viewPatientList === "search by ID Number") {
+    console.log(answers.patientList)
+
+    let selectedIndex = records.find((record) => record.name == answers.patientList)
+    console.log(selectedIndex)
+    console.log(`ID: ${selectedIndex.ID}`)
+    console.log(`name: ${selectedIndex.name}`)
+    console.log(`age: ${selectedIndex.age}`)
+    console.log(`height: ${selectedIndex.height}`)
+    console.log(`weight: ${selectedIndex.weight}`)
+    console.log(`medical conditions: ${selectedIndex.medicalConditions}`)
+    console.log(`medications: ${selectedIndex.medications}`)
+
+   /*if (answers.viewPatientList === "search by ID Number") {
         patientSearchByID()
     }else if(answers.viewPatientList == 'Exit'){medicalProfessionalMenu()} 
     else {
-        let selectedIndex = records.find((record) => record.ID === answers.patientList);
+        let selectedIndex = records.find((record) => record.ID == answers.patientList)
         console.log(selectedIndex)
+    }*/
+    // console.log(`Selected patient: ${answers.patientList}`)
+    // console.log
 
-    }
-    console.log(`Selected patient: ${answers.patientList}`)
-    console.log()
 //  console.log(`ID: ${records[selectedIndex].ID}`)
 //  console.log(`Name: ${records[selectedIndex].name}`)
 //  console.log(`Age: ${records[selectedIndex].age}`)
