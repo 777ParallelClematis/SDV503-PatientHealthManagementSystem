@@ -1,6 +1,6 @@
 [
   {
-    "ID": 10001,
+    "ID": "10001",
     "name": "Abraham Algorithm",
     "age": 42,
     "height": 163,
@@ -12,7 +12,7 @@
     ]
   },
   {
-    "ID": 10002,
+    "ID": "10002",
     "name": "Balding Barnacle",
     "age": 42,
     "height": 163,
@@ -64,6 +64,32 @@
     ],
     "medications": [
       "panadol"
+    ]
+  },
+  {
+    "ID": "10006",
+    "name": "Friendly French",
+    "age": "27",
+    "height": "198",
+    "weight": "42",
+    "medicalConditions": [
+      "Pain au chocolat"
+    ],
+    "medications": [
+      "Croissant"
+    ]
+  },
+  {
+    "ID": "10007",
+    "name": "Gargling Gargoyle",
+    "age": "73",
+    "height": "11",
+    "weight": "40",
+    "medicalConditions": [
+      "Turns to stone every full moon"
+    ],
+    "medications": [
+      "None"
     ]
   }
 ]
