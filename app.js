@@ -2,7 +2,7 @@ import inquirer from 'inquirer'
 import fs from 'fs'
 import path from 'path'
 import nodemailer from 'nodemailer'
-import readline from 'readline'
+import readlineSync from 'readline-sync'
 import chalk from "chalk" // used once in patient search
 
 const recordsData = fs.readFileSync('records.JSON', 'utf8')
@@ -28,7 +28,7 @@ let IDList = records.map(record => Number(record.ID)) // creates an array of exi
       patientMenu()
     } else {
      contactDeveloper()
-     console.clear("Returning you to the Main Menu")
+     console.log("Returning you to the Main Menu")
            }
                               }
 initialMenu()
@@ -160,8 +160,8 @@ const regex = /^[0-9]{5}$/ // five digits
         console.log("Call your hospital on XX-XXX-XXXX")
         patientMenu()
      }else if(answers.patientMenu === "Delete Profile")
-        {console.log(`Patient Deleted. Returning you to the main menu
-        Note: The patient hasnt truly been deleted from the database.`)
+        {console.log(`Patient Deleted. Returning you to the main menu`)
+       console.log(chalk.blue("Note: The patient hasnt truly been deleted from the database."))
        initialMenu() 
   records.slice(patientIndex, 1)//this could would work if the records were able to be updates. it only works with shallow copies rather than deleting it from the file system   
  // work with file system here
@@ -169,6 +169,9 @@ const regex = /^[0-9]{5}$/ // five digits
      else{ initialMenu() }
 
                              }
+
+
+
 
 //function to edit a patient's details or go back
 async function detailEdit(){
@@ -197,44 +200,22 @@ async function detailEdit(){
              `Medications: ${records[1].medications}`,
              'Exit'
 
-        ]
+                 ]
     }]
     const answers = await inquirer.prompt(questions)
 
     if (answers.valueToEdit === 'Exit') {
         initialMenu() // Go back to patient menu
     } else {
-       return answers.valueToedit
-
-    //readline to edit then push to appropriate key/value
+       editValue()
+       //faux readline to cover navigation
 }} 
 
+async function editValue(){
+  let entry = readlineSync.question("Please enter what you'd like to change this value to:")
+  console.log(`Changing value to ${entry}`)
+  console.log(chalk.blue("Note: JSON file has not been altered. Purely prototypal purposes. "))
+  patientMenu()
 
 
-
-async function findAndSetSmallestID() {
-    let minimumID = 10001
-    let maximumID = 99999
-    
-
-    let availableID = minimumID;
-    while (IDList.includes(availableID) && availableID <= maximumID) {
-        availableID++
-    }
-    
-    // Ensure availableID does not exceed maximumID
-    if (availableID > maximumID) {
-        return null // console.error() ??
-    }
-    
-    return String(availableID)
 }
-// Using `await` within an async function to call `findAndSetSmallestID`
-(async () => {
-    let availableID = await findAndSetSmallestID()
-    if (availableID !== null) {
-        console.log(availableID)
-    } else {
-        console.log('No valid ID found within the range.')
-    }
-})()
