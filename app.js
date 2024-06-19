@@ -3,9 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import nodemailer from 'nodemailer'
 import readline from 'readline'
-import chalk from 'chalk'// I am using this!
-// import { profile } from 'console'; - this appeared at an unknown point. I think it was while I was experiementing in my mac terminal with emacs doctor/psychotherapist faeture
-
+import chalk from "chalk" // used once in patient search
 
 const recordsData = fs.readFileSync('records.JSON', 'utf8')
 const records = JSON.parse(recordsData)
@@ -29,9 +27,8 @@ let IDList = records.map(record => Number(record.ID)) // creates an array of exi
     } else if (answers.viewOptions === "I am a Patient") {
       patientMenu()
     } else {
-     contactDeveloper() // Why does this initally return "100010" 
+     contactDeveloper()
      console.clear("Returning you to the Main Menu")
-     initialMenu()
            }
                               }
 initialMenu()
@@ -54,31 +51,38 @@ initialMenu()
      }else{initialMenu()}
                                           }
 
-async function contactDeveloper() {
-console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was going to use nodemailer here but it got messy 
-}
+
+
+    // functinon if contact developer is selected
+        async function contactDeveloper() {
+        console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was going to use nodemailer here but it got messy 
+        initialMenu()
+                                    }
+
+
 
  // function for a medical professional to view a list of their patients or input an ID number
   async function viewPatientList(){
-    let choices = ['Exit', ...records.map(record => record.name)]
+   let choices = ['Exit', ...records.map(record => record.name)]
 
    const questions = [{
 
        type: "list", 
        name: "patientList",
        message: "\nSelect a patient to view", 
-       choices: choices.map(choice => choice === 'Exit' ? chalk.bold.red(choice) : choice)
+       choices: choices
 
                    }]
 
     const answers = await inquirer.prompt(questions)
     console.log(answers.patientList)
 
-if (answers.patientList == "Exit"){medicalProfessionalMenu()}
-else{
-    let selectedIndex = records.find((record) => record.name == answers.patientList)
-console.log(selectedIndex) // prints twice, what is the preferred way?
-    console.log(`ID: ${selectedIndex.ID}`)
+    let selectedIndex = records.find((record) => record.name.trim() === answers.patientList.trim())
+
+if (answers.patientList === "Exit"){medicalProfessionalMenu()}
+else if (selectedIndex){
+  console.log(records.selectedIndex)// - this prints the content as an object
+
     console.log(`name: ${selectedIndex.name}`)
     console.log(`age: ${selectedIndex.age}`)
     console.log(`height: ${selectedIndex.height}`)
@@ -86,8 +90,8 @@ console.log(selectedIndex) // prints twice, what is the preferred way?
     console.log(`medical conditions: ${selectedIndex.medicalConditions}`)
     console.log(`medications: ${selectedIndex.medications}`)
         viewPatientList()
-}}
-
+} 
+  }
 
 
  // function to add a patient into the database (FUNCTIONAL! YAY!)
@@ -129,36 +133,56 @@ const regex = /^[0-9]{5}$/ // five digits
  async function patientMenu() {
      console.log("Patient menu loading ...")
 
+     let patientIndex = 1 // this would be determined by a real login
+
      const questions = [{
         type: "list", 
         name: "patientMenu",
         message: "Select an option",
-        choices:["View Profile","Edit Profile", "Contact Medical Professional", "Exit"]
+        choices:["View Profile","Edit Profile", "Contact Medical Professional", "Delete Profile", "Exit"]
 
     }]
      const answers = await inquirer.prompt(questions)
 
      if (answers.patientMenu === "View Profile"){
-        console.log("ID:"+`${records[1].ID}`), // index 1 selected, this would be populated by how the user logs in, this example is if the user is logged in as 
-        console.log("Name:"+ `${records[1].name}`)
-        console.log("Age:"+ `${records[1].age}`)
-        console.log("Height:"+`${records[1].height}`)
-        console.log("Weight:"+`${records[1].weight}`)
-        console.log("Medical Conditions:"+`${records[1].medicalConditions}`)
-        console.log("Medications: "+ `${records[1].medications}`)
-
+        console.log("ID:"+`${records[patientIndex].ID}`), // index 1 selected, this would be populated by how the user logs in, this example is if the user is logged in as 
+        console.log("Name:"+ `${records[patientIndex].name}`)
+        console.log("Age:"+ `${records[patientIndex].age}`)
+        console.log("Height:"+`${records[patientIndex].height}`)
+        console.log("Weight:"+`${records[patientIndex].weight}`)
+        console.log("Medical Conditions:"+`${records[patientIndex].medicalConditions}`)
+        console.log("Medications: "+ `${records[patientIndex].medications}`)
+        patientMenu()
 
      }else if(answers.patientMenu === "Edit Profile"){
             detailEdit()
      }else if(answers.patientMenu === "Contact Medical Professional"){
         console.log("Call your hospital on XX-XXX-XXXX")
-     }else{initialMenu()}
+        patientMenu()
+     }else if(answers.patientMenu === "Delete Profile")
+        {console.log(`Patient Deleted. Returning you to the main menu
+        Note: The patient hasnt truly been deleted from the database.`)
+       initialMenu() 
+  records.slice(patientIndex, 1)//this could would work if the records were able to be updates. it only works with shallow copies rather than deleting it from the file system   
+ // work with file system here
+}
+     else{ initialMenu() }
 
                              }
 
 //function to edit a patient's details or go back
 async function detailEdit(){
     //select a value to edit
+    let profileToEdit = [{
+        ID: 10002, 
+        name: "Balding Barnacle",
+        age: 42, 
+        height: 163, 
+        weight: 21, 
+        medicalConditions:  "Allergy to whiteboard markers",
+        "medications": [
+          "Medication C"]
+    }]
     const questions = [{
         type: "list", 
         name: "valueToEdit",
@@ -170,13 +194,20 @@ async function detailEdit(){
              `Height: ${records[1].height}`,
              `Weight: ${records[1].weight}`,
              `Medical Conditions: ${records[1].medicalConditions}`,
-             `Medications: ${records[1].medications}`
+             `Medications: ${records[1].medications}`,
+             'Exit'
+
         ]
     }]
-
     const answers = await inquirer.prompt(questions)
-    console.log("Editing "+ answers.valueToEdit)
-}
+
+    if (answers.valueToEdit === 'Exit') {
+        initialMenu() // Go back to patient menu
+    } else {
+       return answers.valueToedit
+
+    //readline to edit then push to appropriate key/value
+}} 
 
 
 
@@ -185,8 +216,7 @@ async function findAndSetSmallestID() {
     let minimumID = 10001
     let maximumID = 99999
     
-    
-    
+
     let availableID = minimumID;
     while (IDList.includes(availableID) && availableID <= maximumID) {
         availableID++
@@ -208,28 +238,3 @@ async function findAndSetSmallestID() {
         console.log('No valid ID found within the range.')
     }
 })()
-
-// async function findSmallestID() {
-//     let minimumID = 10001
-//     let maximumID = 99999
-    
-//     let IDList = []
-    
-//     let availableID = minimumID
-    
-//     for (let i = 0; i < records.length; i++) {
-//         IDList.push(Number(records[i].ID)) // creates an array of existing IDs
-//     }
-//     while (IDList.includes(availableID)) {
-//         availableID++
-//     }
-//     return availableID
-//                                 }
-
-// // Using `await` within an async function to call `findSmallestID`
-// async function main() {
-//     let smallestID = await findSmallestID()
-//     console.log(smallestID)
-// }
-// main()
-
