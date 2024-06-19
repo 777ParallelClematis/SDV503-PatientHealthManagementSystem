@@ -1,9 +1,9 @@
 import inquirer from 'inquirer'
 import fs from 'fs'
 import path from 'path'
-import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer'
 import readline from 'readline'
-// import chalk from "chalk" probably not going to use this
+import chalk from 'chalk'// I am using this!
 // import { profile } from 'console'; - this appeared at an unknown point. I think it was while I was experiementing in my mac terminal with emacs doctor/psychotherapist faeture
 
 
@@ -67,14 +67,13 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was goi
        type: "list", 
        name: "patientList",
        message: "\nSelect a patient to view", 
-       choices: ['search by ID number','Exit', ...records.map(record => record.name)]
+       choices: ['Exit', ...records.map(record => record.name)] // make "exit" bold for readability?
                    }]
 
     const answers = await inquirer.prompt(questions)
     console.log(answers.patientList)
 
-if (answers.patientList == "search by ID number"){patientSearchByID()}
-else if (answers.patientList == "Exit"){medicalProfessionalMenu()}
+if (answers.patientList == "Exit"){medicalProfessionalMenu()}
 else{
     let selectedIndex = records.find((record) => record.name == answers.patientList)
 console.log(selectedIndex)
@@ -124,9 +123,6 @@ medicalProfessionalMenu()
 //regex for ID number
 const regex = /^[0-9]{5}$/ // five digits
 
-
-// Call the function for testing
-patientSearchByID()
 
 
  async function patientMenu() {
