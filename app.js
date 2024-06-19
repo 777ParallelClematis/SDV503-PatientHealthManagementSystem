@@ -10,8 +10,7 @@ const records = JSON.parse(recordsData)
 
 let IDList = records.map(record => Number(record.ID)) // creates an array of existing IDs
 
-
- console.clear("Welcome to RecordPortal 1.0")
+ console.log("Welcome to RecordPortal 1.0") //change to clear
 
 // Function to show initial menu
  async function initialMenu(){
@@ -22,13 +21,14 @@ let IDList = records.map(record => Number(record.ID)) // creates an array of exi
          choices: ["I am a Medical Professional", "I am a Patient", "Other, Contact Developer"] // this menu/function does not have universal back function, everything else will
      }]
      const answers = await inquirer.prompt(questions);
+
       if (answers.viewOptions === "I am a Medical Professional") {
        medicalProfessionalMenu()
     } else if (answers.viewOptions === "I am a Patient") {
       patientMenu()
     } else {
      contactDeveloper()
-     console.clear("Returning you to the Main Menu")
+     console.log("Returning you to the Main Menu")
            }
                               }
 initialMenu()
@@ -63,6 +63,7 @@ initialMenu()
 
  // function for a medical professional to view a list of their patients or input an ID number
   async function viewPatientList(){
+
    let choices = ['Exit', ...records.map(record => record.name)]
 
    const questions = [{
@@ -82,7 +83,6 @@ initialMenu()
 if (answers.patientList === "Exit"){medicalProfessionalMenu()}
 else if (selectedIndex){
   console.log(records.selectedIndex)// - this prints the content as an object
-
     console.log(`name: ${selectedIndex.name}`)
     console.log(`age: ${selectedIndex.age}`)
     console.log(`height: ${selectedIndex.height}`)
@@ -93,13 +93,20 @@ else if (selectedIndex){
 } 
   }
 
-
+//regex for ID number
+const regex = /^[0-9]{5}$/ // five digits
  // function to add a patient into the database (FUNCTIONAL! YAY!)
  async function addPatient(){
-    // call find new ID number function
-    // push it to records array
+ 
     const questions = [
-      //  { name: 'ID', message: 'Enter patient ID:' }, 
+        { name: 'ID', message: 'Enter patient ID:', validate: (input) => {
+            if (!regex.test(input)){
+                return 'Please enter a valid ID number (exactly 5 digits).'
+            }
+             if (IDList.includes(input)) { // does not work !!!!! 
+             return 'This ID already exists. Please enter a different ID.'
+            }
+            return true }},
         { name: 'name', message: 'Enter patient name:' },
         { name: 'age', message: 'Enter patient age:' },
         { name: 'height', message: 'Enter patient height (cm):' },
@@ -114,8 +121,8 @@ else if (selectedIndex){
 
         const recordsData = fs.readFileSync('records.JSON', 'utf8')
         const records = JSON.parse(recordsData)
-// first push the ID number? add it to the object
-     records.push(answers)
+         
+        records.push(answers)
 
      const updatedRecordsData = JSON.stringify(records, null, 2)
 
@@ -125,8 +132,7 @@ else if (selectedIndex){
 medicalProfessionalMenu()
                              }
 
-//regex for ID number
-const regex = /^[0-9]{5}$/ // five digits
+
 
 
 
@@ -160,11 +166,11 @@ const regex = /^[0-9]{5}$/ // five digits
         console.log("Call your hospital on XX-XXX-XXXX")
         patientMenu()
      }else if(answers.patientMenu === "Delete Profile")
-        {console.log(`Patient Deleted. Returning you to the main menu
-        Note: The patient hasnt truly been deleted from the database.`)
-       initialMenu() 
-  records.slice(patientIndex, 1)//this could would work if the records were able to be updates. it only works with shallow copies rather than deleting it from the file system   
- // work with file system here
+        {console.log(`Patient ${records[1].ID}, ${records[1].name} Deleted. Returning you to the main menu")`)
+        console.log(chalk.blue("Note: The patient hasnt truly been deleted from the JSON file.\n Purely prototype purposes."))
+       patientMenu()
+       // records.slice(patientIndex, 1)//this could would work if the records were able to be updates. it only works with shallow copies rather than deleting it from the file system   
+       // future work with file system here, note the correct paths and details on lines 9 and 10 of app.js
 }
      else{ initialMenu() }
 
@@ -204,37 +210,20 @@ async function detailEdit(){
     if (answers.valueToEdit === 'Exit') {
         initialMenu() // Go back to patient menu
     } else {
-       return answers.valueToedit
+    editChosenDetail()
 
     //readline to edit then push to appropriate key/value
 }} 
 
+async function editChosenDetail(){
+  const question = [{
+    name: "inputForChosenDetail" ,message: "Enter what you'd like to change the value to"
+  }]
+  const answers = await inquirer.prompt(question)
+    // would push that edited value to the JSON file
+  console.log("Alteration Made")
+  console.log(chalk.blue("Note: This did not alter the data in the JSON file. Purely prototype purposes."))
+  patientMenu()
 
-
-
-async function findAndSetSmallestID() {
-    let minimumID = 10001
-    let maximumID = 99999
-    
-
-    let availableID = minimumID;
-    while (IDList.includes(availableID) && availableID <= maximumID) {
-        availableID++
-    }
-    
-    // Ensure availableID does not exceed maximumID
-    if (availableID > maximumID) {
-        return null // console.error() ??
-    }
-    
-    return String(availableID)
 }
-// Using `await` within an async function to call `findAndSetSmallestID`
-(async () => {
-    let availableID = await findAndSetSmallestID()
-    if (availableID !== null) {
-        console.log(availableID)
-    } else {
-        console.log('No valid ID found within the range.')
-    }
-})()
+
