@@ -13,9 +13,7 @@ const records = JSON.parse(recordsData)
 let IDList = records.map(record => Number(record.ID)) // creates an array of existing IDs
 
 
- console.log("Welcome to RecordPortal 1.0")
-
-console.log(IDList)
+ console.clear("Welcome to RecordPortal 1.0")
 
 // Function to show initial menu
  async function initialMenu(){
@@ -62,12 +60,15 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was goi
 
  // function for a medical professional to view a list of their patients or input an ID number
   async function viewPatientList(){
+    let choices = ['Exit', ...records.map(record => record.name)]
 
    const questions = [{
+
        type: "list", 
        name: "patientList",
        message: "\nSelect a patient to view", 
-       choices: ['Exit', ...records.map(record => record.name)] // make "exit" bold for readability?
+       choices: choices.map(choice => choice === 'Exit' ? chalk.bold.red(choice) : choice)
+
                    }]
 
     const answers = await inquirer.prompt(questions)
@@ -76,8 +77,8 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was goi
 if (answers.patientList == "Exit"){medicalProfessionalMenu()}
 else{
     let selectedIndex = records.find((record) => record.name == answers.patientList)
-console.log(selectedIndex)
-    console.clear(`ID: ${selectedIndex.ID}`)
+console.log(selectedIndex) // prints twice, what is the preferred way?
+    console.log(`ID: ${selectedIndex.ID}`)
     console.log(`name: ${selectedIndex.name}`)
     console.log(`age: ${selectedIndex.age}`)
     console.log(`height: ${selectedIndex.height}`)
