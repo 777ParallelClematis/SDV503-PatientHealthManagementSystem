@@ -3,13 +3,19 @@ import fs from 'fs'
 import path from 'path'
 import nodemailer from 'nodemailer';
 import readlineSync from 'readline-sync';
+// import chalk from "chalk" probably not going to use this
+// import { profile } from 'console'; - this appeared at an unknown point. I think it was while I was experiementing in my mac terminal with emacs doctor/psychotherapist faeture
 
 
 const recordsData = fs.readFileSync('records.JSON', 'utf8')
 const records = JSON.parse(recordsData)
 
+let IDList = records.map(record => Number(record.ID)) // creates an array of existing IDs
 
- console.clear("Welcome to RecordPortal 1.0")
+
+ console.log("Welcome to RecordPortal 1.0")
+
+console.log(IDList)
 
 // Function to show initial menu
  async function initialMenu(){
@@ -25,7 +31,9 @@ const records = JSON.parse(recordsData)
     } else if (answers.viewOptions === "I am a Patient") {
       patientMenu()
     } else {
-     contactDeveloper()
+     contactDeveloper() // Why does this initally return "100010" 
+     console.clear("Returning you to the Main Menu")
+     initialMenu()
            }
                               }
 initialMenu()
@@ -33,10 +41,11 @@ initialMenu()
 
 // function to show the medical professional menu of actions that can be made
  async function medicalProfessionalMenu() {
+    console.clear()
     const questions = [{
     type: "list",
     name: "medicalProfessionalMenu", 
-    message: "Select an option", 
+    message: "Medical Professional Menu \n Select an option:", 
      choices: ["View Patient List", "Add a Patient", "Exit"] 
      }]
      const answers = await inquirer.prompt(questions)
@@ -49,49 +58,37 @@ initialMenu()
 
 async function contactDeveloper() {
 console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was going to use nodemailer here but it got messy 
-
 }
 
  // function for a medical professional to view a list of their patients or input an ID number
   async function viewPatientList(){
+
    const questions = [{
        type: "list", 
        name: "patientList",
-       message: "Select a patient to view", 
+       message: "\nSelect a patient to view", 
        choices: ['search by ID number','Exit', ...records.map(record => record.name)]
                    }]
 
     const answers = await inquirer.prompt(questions)
     console.log(answers.patientList)
 
+if (answers.patientList == "search by ID number"){patientSearchByID()}
+else if (answers.patientList == "Exit"){medicalProfessionalMenu()}
+else{
     let selectedIndex = records.find((record) => record.name == answers.patientList)
-    console.log(selectedIndex)
-    console.log(`ID: ${selectedIndex.ID}`)
+console.log(selectedIndex)
+    console.clear(`ID: ${selectedIndex.ID}`)
     console.log(`name: ${selectedIndex.name}`)
     console.log(`age: ${selectedIndex.age}`)
     console.log(`height: ${selectedIndex.height}`)
     console.log(`weight: ${selectedIndex.weight}`)
     console.log(`medical conditions: ${selectedIndex.medicalConditions}`)
     console.log(`medications: ${selectedIndex.medications}`)
+        viewPatientList()
+}}
 
-   /*if (answers.viewPatientList === "search by ID Number") {
-        patientSearchByID()
-    }else if(answers.viewPatientList == 'Exit'){medicalProfessionalMenu()} 
-    else {
-        let selectedIndex = records.find((record) => record.ID == answers.patientList)
-        console.log(selectedIndex)
-    }*/
-    // console.log(`Selected patient: ${answers.patientList}`)
-    // console.log
 
-//  console.log(`ID: ${records[selectedIndex].ID}`)
-//  console.log(`Name: ${records[selectedIndex].name}`)
-//  console.log(`Age: ${records[selectedIndex].age}`)
-//  console.log(`Height:${records[selectedIndex].height}`)
-//  console.log(`Weight: ${records[selectedIndex].weight}`)
-//  console.log(`Medical Conditions: ${records[selectedIndex].medicalConditions}`)
-//  console.log(`Medications: ${records[selectedIndex].medications}`)
-}
 
  // function to add a patient into the database (FUNCTIONAL! YAY!)
  async function addPatient(){
@@ -107,13 +104,13 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was goi
         { name: 'medications', message: 'Enter patient medications (comma-separated):' }] // test with/without comma between final brackets
 
         const answers = await inquirer.prompt(questions)
-            answers.ID.toString
+           // answers.ID.toString
          answers.medicalConditions = answers.medicalConditions.split(',').map(str => str.trim())
          answers.medications = answers.medications.split(',').map(str => str.trim())
 
         const recordsData = fs.readFileSync('records.JSON', 'utf8')
         const records = JSON.parse(recordsData)
-
+// first push the ID number? add it to the object
      records.push(answers)
 
      const updatedRecordsData = JSON.stringify(records, null, 2)
@@ -124,23 +121,57 @@ console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was goi
 medicalProfessionalMenu()
                              }
 
-
-const regex = /^[0-9]{5}$/ 
+//regex for ID number
+const regex = /^[0-9]{5}$/ // five digits
 // search by ID number
-async function patientSearchByID(){
-let search = readlineSync.question("Enter your search here: ") /////////////////////////////// readline to input a patients ID, and appropriate validation whether it exists in the database/JSON file or not. 
-if (records.includes(search)){
-console.log(`Showing Patient with ID ${search}`)
-console.log(patient)
-}else if (regex.test(search)){
+// async function patientSearchByID(){ // what will it be awaiting?
 
+// let search = readlineSync.question("Enter your search here: (or enter `Back' to return to previous menu)") 
+// // if search exists in the IDList array
+//     if (IDList.includes(search)){ // check format
 
-}else{
-    console.error("Input not in expected ID number format, try again or exit")
-    patientSearchByID()
-} 
+//    // retrieve index
+//         console.log(`Showing Patient with ID ${records[index]}`)
+//         console.log(record[1])
 
+// }else if (search.toLowerCase() === "back"){ // not working
+//     viewPatientList()
+//         }
+// else if (regex.test(search)){ // if the search is in the right format (passes regex)
+// console.log("This appears to be in the correct format, but does not exist in our system.")
+
+// // if search is otherwise
+// }
+
+// {
+//     console.log("Input not in expected ID number format")
+//     patientSearchByID()
+// } 
+
+//}
+
+async function patientSearchByID() {
+    while (true) {
+        let search = readlineSync.question("Enter your search here: (or enter `Back` to return to previous menu)")
+
+        if (IDList.includes(search)) { // if search exists in the IDList array
+            let index = IDList.indexOf(search) // retrieve index
+            console.log(`Showing Patient with ID ${records[index][0]}`)
+            console.log(records[index][1])
+        } else if (search.toLowerCase() === "back") { // if search is "back"
+            viewPatientList()
+            return // immediately return to exit the function
+        } else if (regex.test(search)) { // if the search is in the right format (passes regex)
+            console.log("This appears to be in the correct format, but does not exist in our system.")
+        } else { // if search is otherwise
+            console.log("Input not in expected ID number format")
+            patientSearchByID
+        }
+    }
 }
+
+// Call the function for testing
+patientSearchByID()
 
 
  async function patientMenu() {
@@ -156,11 +187,17 @@ console.log(patient)
      const answers = await inquirer.prompt(questions)
 
      if (answers.patientMenu === "View Profile"){
-console.log("ID:"+`${records[1].ID}`), // index 1 selected, this would be populated by how the user logs in 
-console.log("name:"+ `${records[1].name}`)
+        console.log("ID:"+`${records[1].ID}`), // index 1 selected, this would be populated by how the user logs in, this example is if the user is logged in as 
+        console.log("Name:"+ `${records[1].name}`)
+        console.log("Age:"+ `${records[1].age}`)
+        console.log("Height:"+`${records[1].height}`)
+        console.log("Weight:"+`${records[1].weight}`)
+        console.log("Medical Conditions:"+`${records[1].medicalConditions}`)
+        console.log("Medications: "+ `${records[1].medications}`)
+
 
      }else if(answers.patientMenu === "Edit Profile"){
-
+            detailEdit()
      }else if(answers.patientMenu === "Contact Medical Professional"){
         console.log("Call your hospital on XX-XXX-XXXX")
      }else{initialMenu()}
@@ -168,25 +205,79 @@ console.log("name:"+ `${records[1].name}`)
                              }
 
 //function to edit a patient's details or go back
+async function detailEdit(){
+    //select a value to edit
+    const questions = [{
+        type: "list", 
+        name: "valueToEdit",
+        message: "Please select which value you'd like to edit",
+        choices: [
+            `ID: ${records[1].ID}`, // make sure this cannot be edited
+             `Name: ${records[1].name}`,
+             `Age: ${records[1].age}`,
+             `Height: ${records[1].height}`,
+             `Weight: ${records[1].weight}`,
+             `Medical Conditions: ${records[1].medicalConditions}`,
+             `Medications: ${records[1].medications}`
+        ]
+    }]
 
-// universal back function ??
-async function universalBack(){
-
+    const answers = await inquirer.prompt(questions)
+    console.log("Editing "+ answers.valueToEdit)
 }
-    /* displays previous page */
 
-// function to find smallest available ID number. 
-// ID numbers must be between 10000 and 99999. 
 
-async function findNewID(records) {
-    let newID = 10000
-    let usedIDs = new Set()
-    for (let record of records) {
-        usedIDs.add(parseInt(record.ID, 10))
-    } while (usedIDs.has(newID) && newID <= 99999) {
-        newID++
-    } if (newID > 99999) {
-        throw new Error('No available IDs in the range 10000-99999')
+
+
+async function findAndSetSmallestID() {
+    let minimumID = 10001
+    let maximumID = 99999
+    
+    
+    
+    let availableID = minimumID;
+    while (IDList.includes(availableID) && availableID <= maximumID) {
+        availableID++
     }
-    return newID
+    
+    // Ensure availableID does not exceed maximumID
+    if (availableID > maximumID) {
+        return null // console.error() ??
+    }
+    
+    return String(availableID)
 }
+// Using `await` within an async function to call `findAndSetSmallestID`
+(async () => {
+    let availableID = await findAndSetSmallestID()
+    if (availableID !== null) {
+        console.log(availableID)
+    } else {
+        console.log('No valid ID found within the range.')
+    }
+})()
+
+// async function findSmallestID() {
+//     let minimumID = 10001
+//     let maximumID = 99999
+    
+//     let IDList = []
+    
+//     let availableID = minimumID
+    
+//     for (let i = 0; i < records.length; i++) {
+//         IDList.push(Number(records[i].ID)) // creates an array of existing IDs
+//     }
+//     while (IDList.includes(availableID)) {
+//         availableID++
+//     }
+//     return availableID
+//                                 }
+
+// // Using `await` within an async function to call `findSmallestID`
+// async function main() {
+//     let smallestID = await findSmallestID()
+//     console.log(smallestID)
+// }
+// main()
+

@@ -91,5 +91,47 @@
     "medications": [
       "None"
     ]
+  },
+  {
+    "ID": "10008",
+    "name": "Hamburg Hollyhock",
+    "age": "33",
+    "height": "174",
+    "weight": "22",
+    "medicalConditions": [
+      "Cat Allergy",
+      "Photogenic"
+    ],
+    "medications": [
+      "Antihistamines"
+    ]
+  },
+  {
+    "ID": "10009",
+    "name": "Igor Iceberg",
+    "age": "63",
+    "height": "164",
+    "weight": "92",
+    "medicalConditions": [
+      "Hyperthymesia",
+      "diabetes type 2"
+    ],
+    "medications": [
+      "Insulin"
+    ]
+  },
+  {
+    "ID": "10010",
+    "name": "Just Joking",
+    "age": "42",
+    "height": "143",
+    "weight": "57",
+    "medicalConditions": [
+      "Allergy to raincoats",
+      "allergy to umbrellas"
+    ],
+    "medications": [
+      "Concrete Pills"
+    ]
   }
 ]
