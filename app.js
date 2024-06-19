@@ -2,7 +2,7 @@ import inquirer from 'inquirer'
 import fs from 'fs'
 import path from 'path'
 import nodemailer from 'nodemailer';
-import readlineSync from 'readline-sync';
+import readline from 'readline'
 // import chalk from "chalk" probably not going to use this
 // import { profile } from 'console'; - this appeared at an unknown point. I think it was while I was experiementing in my mac terminal with emacs doctor/psychotherapist faeture
 
@@ -123,52 +123,7 @@ medicalProfessionalMenu()
 
 //regex for ID number
 const regex = /^[0-9]{5}$/ // five digits
-// search by ID number
-// async function patientSearchByID(){ // what will it be awaiting?
 
-// let search = readlineSync.question("Enter your search here: (or enter `Back' to return to previous menu)") 
-// // if search exists in the IDList array
-//     if (IDList.includes(search)){ // check format
-
-//    // retrieve index
-//         console.log(`Showing Patient with ID ${records[index]}`)
-//         console.log(record[1])
-
-// }else if (search.toLowerCase() === "back"){ // not working
-//     viewPatientList()
-//         }
-// else if (regex.test(search)){ // if the search is in the right format (passes regex)
-// console.log("This appears to be in the correct format, but does not exist in our system.")
-
-// // if search is otherwise
-// }
-
-// {
-//     console.log("Input not in expected ID number format")
-//     patientSearchByID()
-// } 
-
-//}
-
-async function patientSearchByID() {
-    while (true) {
-        let search = readlineSync.question("Enter your search here: (or enter `Back` to return to previous menu)")
-
-        if (IDList.includes(search)) { // if search exists in the IDList array
-            let index = IDList.indexOf(search) // retrieve index
-            console.log(`Showing Patient with ID ${records[index][0]}`)
-            console.log(records[index][1])
-        } else if (search.toLowerCase() === "back") { // if search is "back"
-            viewPatientList()
-            return // immediately return to exit the function
-        } else if (regex.test(search)) { // if the search is in the right format (passes regex)
-            console.log("This appears to be in the correct format, but does not exist in our system.")
-        } else { // if search is otherwise
-            console.log("Input not in expected ID number format")
-            patientSearchByID
-        }
-    }
-}
 
 // Call the function for testing
 patientSearchByID()
