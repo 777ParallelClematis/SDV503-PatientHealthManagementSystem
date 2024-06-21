@@ -125,8 +125,7 @@ else if (selectedIndex){ // if there is truly a selected index present, determin
          answers.medicalConditions = answers.medicalConditions.split(',').map(str => str.trim()) // makes each part of the string, separated by a comma, an element in the "medical conditions" array
          answers.medications = answers.medications.split(',').map(str => str.trim()) // same as above for medications
 
-     //   const recordsData = fs.readFileSync('records.JSON', 'utf8') // this is also on line 8 & 9, unsure why it ended up here, keeping as comment for potential future debugging purposes
-     //   const records = JSON.parse(recordsData) 
+
           records.push(answers) // pushes the answers to the records array
 
      const updatedRecordsData = JSON.stringify(records, null, 2) // makes it into an object
