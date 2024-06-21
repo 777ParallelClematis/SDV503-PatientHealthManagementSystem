@@ -29,7 +29,6 @@ The choice selected prompts which corresponding function is performed next
       patientMenu()
     } else {
      contactDeveloper()
-     console.log("Returning you to the Main Menu")
            }
                               }
 initialMenu()
