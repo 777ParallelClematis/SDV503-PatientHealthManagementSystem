@@ -58,7 +58,7 @@ These are "deep" functions, meaning that they read from and make real additions 
 /*Function to display contact information for the developer (could be altered to database admin for a GUI iteration)
 Returns the user to the initial menu.  */
         async function contactDeveloper() {
-        console.log("Contact the developer at erin-colane@live.nmit.ac.nz") // I was going to use nodemailer here but it got messy 
+        console.log("Contact the developer at erin-colane@live.nmit.ac.nz") 
         initialMenu()
                                     }
 
