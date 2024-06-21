@@ -7,7 +7,7 @@ import chalk from "chalk"
 const recordsData = fs.readFileSync('records.JSON', 'utf8')
 const records = JSON.parse(recordsData)
 
-let IDList = records.map(record => Number(record.ID)) // creates an array of existing IDs
+
 
 
 

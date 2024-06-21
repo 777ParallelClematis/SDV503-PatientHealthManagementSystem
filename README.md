@@ -5,6 +5,7 @@ Functions for future development:
 
 *ID list which creates an array of all current ID's*
 let IDList = records.map(record => Number(record.ID)) 
+
 **can quickly check if an ID is in here by using this condition:**
 if(IDList.includes)
 
