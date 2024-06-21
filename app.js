@@ -9,9 +9,6 @@ const records = JSON.parse(recordsData)
 
 
 
-
-
-
 /* Function to show initial menu. uses inquirer package to show the user three choices. 
 The choice selected prompts which corresponding function is performed next
 */
