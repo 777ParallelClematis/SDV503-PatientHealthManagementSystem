@@ -78,7 +78,6 @@ Returns the user to the initial menu.  */
                    }]
 
     const answers = await inquirer.prompt(questions)
-    console.log(answers.patientList)
 
     let selectedIndex = records.find((record) => record.name.trim() === answers.patientList.trim())  // finds the record with the same name value as was selected by the user. Identifies it with the index
 
