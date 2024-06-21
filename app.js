@@ -10,12 +10,13 @@ const records = JSON.parse(recordsData)
 let IDList = records.map(record => Number(record.ID)) // creates an array of existing IDs
 
 
- console.clear("Welcome to RecordPortal 1.0")
+
 
 /* Function to show initial menu. uses inquirer package to show the user three choices. 
 The choice selected prompts which corresponding function is performed next
 */
  async function initialMenu(){
+  console.log("Welcome to RecordPortal 1.0")
     const questions = [{
          type: "list",
          name: "viewOptions",
@@ -28,7 +29,7 @@ The choice selected prompts which corresponding function is performed next
     } else if (answers.viewOptions === "I am a Patient") {
       patientMenu()
     } else {
-     contactDeveloper()
+     contactDeveloper()``
            }
                               }
 initialMenu()
