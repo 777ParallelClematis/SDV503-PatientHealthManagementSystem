@@ -189,7 +189,7 @@ async function detailEdit(){
         name: "valueToEdit",
         message: "Please select which value you'd like to edit",
         choices: [
-           // `ID: ${records[1].ID}`, cannot be edited because its an unique identifier
+                        // left out`ID: ${records[1].ID}`, cannot be edited because its an unique identifier. 
              `Name: ${records[1].name}`, // has the value of records, at index 1, at the .name key. 
              `Age: ${records[1].age}`,
              `Height: ${records[1].height}`,
@@ -197,16 +197,14 @@ async function detailEdit(){
              `Medical Conditions: ${records[1].medicalConditions}`,
              `Medications: ${records[1].medications}`,
              'Back'
-
                  ]
-    }]
-    const answers = await inquirer.prompt(questions)
+                        }]
+            const answers = await inquirer.prompt(questions)
 
-    if (answers.valueToEdit === 'Back') {
-        initialMenu() // Go back to patient menu
-    } else {
-       editValue()
-}} 
+               if (answers.valueToEdit === 'Back') {
+                        initialMenu() // Go back to patient menu
+             } else {editValue()}
+} 
 
 async function editValue(){ // shallow concept that conveys how user input would be taken. 
   let entry = readlineSync.question("Please enter what you'd like to change this value to:") // uses readline sync for this, the "entry" variable is used nowhere but on the following line
